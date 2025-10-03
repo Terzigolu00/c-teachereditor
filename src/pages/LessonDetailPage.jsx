@@ -1,11 +1,13 @@
 import { useParams, Link } from 'react-router-dom'
-import { ArrowLeft, Clock, Target, Code, BookOpen } from 'lucide-react'
+import { useState } from 'react'
+import { ArrowLeft, Clock, Target, Code, BookOpen, Lightbulb } from 'lucide-react'
 import { lessons } from '../data/lessons'
 import CodeEditor from '../components/CodeEditor'
 
 const LessonDetailPage = () => {
   const { id } = useParams()
   const lesson = lessons.find(lesson => lesson.id === parseInt(id))
+  const [showSimpleExplanation, setShowSimpleExplanation] = useState(false)
 
   if (!lesson) {
     return (
@@ -75,7 +77,27 @@ const LessonDetailPage = () => {
 
           <section className="content-section">
             <h2>Açıklama</h2>
-            <p className="explanation">{lesson.content.explanation}</p>
+            <div className="explanation-header">
+              <p className="explanation">{lesson.content.explanation}</p>
+              {lesson.content.simpleExplanation && (
+                <button 
+                  className="simple-explanation-btn"
+                  onClick={() => setShowSimpleExplanation(!showSimpleExplanation)}
+                >
+                  <Lightbulb size={16} />
+                  {showSimpleExplanation ? 'Basit Açıklamayı Gizle' : '🤓 Çok Detaylı ve Basit Açıklama'}
+                </button>
+              )}
+            </div>
+            
+            {showSimpleExplanation && lesson.content.simpleExplanation && (
+              <div className="simple-explanation-content">
+                <div className="simple-explanation-text">
+                  <h3>🤓 Her Şeyi Detaylıca ve Basitçe Anlayalım!</h3>
+                  <div className="simple-text">{lesson.content.simpleExplanation}</div>
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="content-section">
